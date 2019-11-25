@@ -1,0 +1,5 @@
+# AutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.pm.background.common.config.DefaultFastjsonConfig,\
+com.pm.background.common.config.DefaultProperties
+

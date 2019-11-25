@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pm.background.welfare.core.active.dao.CommunityInvitedMapper">
+
+    <!--<insert id="insertInvitedPeople" parameterType="java.util.List">
+    insert  into  community_invited (userId,communityId,communityName,createUserName,create_time) values
+    <foreach collection="list" item="item" index="index" separator=",">
+        (
+        #{item.userId},#{item.communityId},#{item.communityName},#{item.createUserName},#{item.createTime}
+        )
+    </foreach>
+    </insert>-->
+    <insert id="insertInvitedPeople" parameterType="com.pm.background.welfare.core.active.entity.CommunityInvited">
+    insert  into  community_invited (userId,communityId,communityName,createUserName,create_time,createUserId,userName) values (#{userId},#{communityId},#{communityName},#{createUserName},#{createTime},#{createUserId},#{userName})
+</insert>
+
+    <insert id="insertCommunityUser" parameterType="com.pm.background.welfare.core.active.entity.CommunityInvited">
+        insert into community_user (communityId,userId) values (#{communityId},#{userId})
+    </insert>
+    <insert id="upUserToCaptain" parameterType="com.pm.background.welfare.core.active.entity.CommunityInvited">
+          insert  into sys_user_role (user_id,role_id)
+          values (#{userId},2)
+    </insert>
+    <insert id="insertCommunityChat" parameterType="com.pm.background.welfare.core.active.entity.CommunityChat">
+        insert into communityChat (userId,content,userName,createTime,communityId)
+        values (#{userId},#{content},#{userName},#{createTime},#{communityId})
+    </insert>
+    <!--<select id="selectCommunityChat" resultType="com.pm.background.welfare.core.active.entity.CommunityChat">
+        select userId,content,userName,createTime,communityId from communityChat where communityId = #{communityId}  ORDER BY createTime desc limit #{startPage},#{endPage}
+    </select>-->
+    <select id="selectCommunityChat" resultType="com.pm.background.welfare.core.active.entity.CommunityChat">
+        select userId,content,userName,createTime,communityId from communityChat where communityId = #{communityId}  ORDER BY createTime desc
+    </select>
+    <select id="selectIfHaveUser" parameterType="com.pm.background.welfare.core.active.entity.CommunityChat"
+            resultType="java.lang.Integer">
+        select count(1) from sys_user_role where user_id = #{userId} and role_id = #{communityId}
+    </select>
+    <!--    查询是否已经申请过-->
+    <select id="selectIfApplyInsertInvited"
+            parameterType="com.pm.background.welfare.core.active.entity.CommunityInvited"
+            resultType="java.lang.Integer">
+      select count(1) from community_invited where communityId = #{communityId} and userId = #{userId}
+    </select>
+</mapper>

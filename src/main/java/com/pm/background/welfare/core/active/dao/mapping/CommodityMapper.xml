@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pm.background.welfare.core.active.dao.CommodityMapper">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.pm.background.welfare.core.active.entity.Commodity" id="BaseResultMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="unitPrice" column="unitPrice"/>
+        <result property="number" column="number"/>
+        <result property="address" column="address"/>
+        <result property="createTime" column="create_time"/>
+        <result property="type" column="type"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+               a.id AS "id",
+               a.name AS "name",
+               a.description AS "description",
+               a.unitPrice AS "unitPrice",
+               a.number AS "number",
+               a.address AS "address",
+               a.create_time AS "createTime",
+               a.type AS "type"
+    	</sql>
+
+    <!--  <update id="upCommodity">
+          update sys_commodity set status='50'
+          where id in
+          <foreach collection="array" open="(" separator="," close=")" item="idArray">
+              #{idArray}
+          </foreach>
+      </update>-->
+    <update id="upCommodity">
+        update sys_commodity set
+        status = #{status},
+        statusName = #{statusName}
+        where id  = #{id}
+
+    </update>
+
+    <update id="downCommodity">
+         update sys_commodity set
+        status = #{status},
+        statusName = #{statusName}
+        where id  = #{id}
+    </update>
+
+    <select id="byIdFindPrice" resultType="java.lang.Double">
+        select  a.unitPrice from sys_commodity a where a.id=#{id}
+    </select>
+    <select id="deleteByCommodityIdGetActiveId" resultType="java.lang.String">
+         delete from active_info where id =
+        (select a.activeId from binding_commodity a where a.commodityId = #{id})
+    </select>
+    <insert id="insertIntegralCommodity" parameterType="com.pm.background.welfare.core.active.entity.IntegralCommodity">
+        insert  into integralMall (imageAddress,title,integral,popularType) values (#{imageAddress},#{title},#{integral},#{popularType})
+    </insert>
+    <update id="updateIntegralCommodity" parameterType="com.pm.background.welfare.core.active.entity.IntegralCommodity">
+        update  integralMall set
+        imageAddress = #{imageAddress},
+        title = #{title},
+        integral = #{integral},
+        popularType = #{popularType}
+        where id = #{id}
+    </update>
+    <delete id="deleteIntegralCommodity">
+        delete  from  integralMall where id = #{id}
+    </delete>
+    <select id="selectIntegralCommodity" resultType="com.pm.background.welfare.core.active.entity.IntegralCommodity">
+    select  id,imageAddress,title,integral,popularType from integralMall where 1=1 limit #{startSize},#{endSize}
+</select>
+    <update id="updateCommudityNumber" parameterType="com.pm.background.welfare.core.active.entity.Commodity">
+        update sys_commodity set number = #{number} where id = #{id}
+    </update>
+</mapper>

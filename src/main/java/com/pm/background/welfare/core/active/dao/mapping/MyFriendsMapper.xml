@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pm.background.welfare.core.active.dao.MyFriendsMapper">
+    <update id="updateIfAgreeStatus" parameterType="java.lang.Long">
+        update myFriends set ifAgree = '1' where myId = #{myId} and  myFriendId = #{myFriendId}
+    </update>
+    <select id="byFriendIdGetEntity" resultType="com.pm.background.welfare.core.active.entity.MyFriends">
+        select id,myId,myFriendId,myFriendPicture,myFriendName from myFriends where myFriendId = #{myFriendId} and myId = #{myId}
+    </select>
+
+    <select id="myFriendsListAll" parameterType="com.pm.background.welfare.core.active.entity.MyFriends"
+            resultType="com.pm.background.welfare.core.active.entity.MyFriends">
+        select  id,myId,myFriendId,myFriendPicture,myFriendName,ifAgree from  myFriends where ifAgree = '1'and   myId = #{myId}
+    </select>
+    <select id="selectNoAddCommunity" parameterType="com.pm.background.welfare.core.active.entity.MyFriends"
+            resultType="com.pm.background.welfare.core.active.entity.MyFriends">
+        select  * from myFriends where myId = #{myId} and ifAgree = '1' and myFriendId not in (select userId from community_user where communityId = #{myFriendId})
+    </select>
+</mapper>

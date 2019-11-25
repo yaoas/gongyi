@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pm.background.welfare.core.active.dao.OrderInfoMapper">
+    <update id="updatePaymentStatus" parameterType="com.pm.background.welfare.core.active.entity.OrderInfo">
+        update order_info set paymentStatus = #{paymentStatus} ,paymentStatusName = #{paymentStatusName} where id = #{id}
+    </update>
+    <update id="updateMyPonStatus" parameterType="java.lang.Long">
+        update myEcoupon set payStatus = '1'  where orderId = #{id}
+    </update>
+    <select id="selectMyCoupon" resultType="com.pm.background.welfare.core.active.entity.MyEcoupon">
+        SELECT *  from myEcoupon  where  payStatus = '1' and userId = #{userId}  limit  #{startSize},#{endSize}
+   </select>
+    <insert id="insertMycoupon" parameterType="com.pm.background.welfare.core.active.entity.MyEcoupon"
+            useGeneratedKeys="true" keyProperty="id">
+        insert  into myEcoupon (title,unitPrice,useStatus,userId,codeAddress,payStatus,orderId) values (#{title},#{unitPrice},#{useStatus},#{userId},#{codeAddress},#{payStatus},#{orderId})
+    </insert>
+    <update id="useMyCoupon" parameterType="com.pm.background.welfare.core.active.entity.MyEcoupon">
+        update myEcoupon set useStatus = '1' where id = #{id}
+    </update>
+     <select id="selectRatio" resultType="java.lang.Float">
+         select ratio from deductionRatio where id = #{id}
+     </select>
+    <select id="selectRatioPage" resultType="com.pm.background.welfare.core.active.entity.DudecationRatio">
+  select  * from deductionRatio where 1=1 limit  #{startPage} ,#{endPage}
+    </select>
+    <delete id="deleteRatio">
+        delete  from deductionRatio where id = #{id}
+    </delete>
+    <insert id="failOut" parameterType="com.pm.background.welfare.core.active.entity.OrderInfo" >
+        insert into failOut(content,orderId.userId) values (#{remark},#{orderId},#{receiveInfoId})
+    </insert>
+    <!-- 查询交易比-->
+    <select id="statisticsPricePage" resultType="com.pm.background.welfare.core.active.entity.OrderInfo">
+        select * from order_info where 1=1
+        <if test="paymentStatus != null and paymentStatus != ''">
+            and  paymentStatus  = #{paymentStatus}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and create_time >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and  #{endTime} > create_time
+        </if>
+        <if test="productUserId != null and productUserId != ''">
+            and  productUserId  = #{productUserId}
+        </if>
+        <if test="productName != null and productName != ''">
+            and  productName  = #{productName}
+        </if>
+        <if test="id != null and id != ''">
+            and  id  = #{id}
+        </if>
+        limit  #{startSize},#{endSize}
+    </select>
+   <select id="statisticsPrice" resultType="com.pm.background.welfare.core.active.entity.OrderInfo" >
+       select FORMAT(sum(costCash),2) as costCash ,FORMAT(sum(preperPriceAll),2) as preperPriceAll  from order_info where 1=1
+       <if test="paymentStatus != null and paymentStatus != ''">
+           and  paymentStatus  = #{paymentStatus}
+       </if>
+       <if test="startTime != null and startTime != ''">
+           and create_time >= #{startTime}
+       </if>
+       <if test="endTime != null and endTime != ''">
+           and  #{endTime} > create_time
+       </if>
+       <if test="productUserId != null and productUserId != ''">
+           and  productUserId  = #{productUserId}
+       </if>
+       <if test="productName != null and productName != ''">
+           and  productName  = #{productName}
+       </if>
+       <if test="id != null and id != ''">
+           and  id  = #{id}
+       </if>
+   </select>
+    <select id="returnStatisticsPrice" resultType="com.pm.background.welfare.core.active.entity.OrderInfo" >
+        select FORMAT(sum(costCash),2) as costCash ,FORMAT(sum(preperPriceAll),2) as preperPriceAll  from order_info where 1=1
+            and  paymentStatus  = '3'
+        <if test="startTime != null and startTime != ''">
+            and create_time >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and  #{endTime} > create_time
+        </if>
+        <if test="productUserId != null and productUserId != ''">
+            and  productUserId  = #{productUserId}
+        </if>
+    </select>
+    <select id="sumCount" resultType="java.lang.Integer">
+        select count(1) from order_info where 1=1
+        <if test="paymentStatus != null and paymentStatus != ''">
+        and  paymentStatus  = #{paymentStatus}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and create_time >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and  #{endTime} > create_time
+        </if>
+        <if test="productUserId != null and productUserId != ''">
+            and  productUserId  = #{productUserId}
+        </if>
+        <if test="productName != null and productName != ''">
+            and  productName  = #{productName}
+        </if>
+        <if test="id != null and id != ''">
+            and  id  = #{id}
+        </if>
+    </select>
+</mapper>

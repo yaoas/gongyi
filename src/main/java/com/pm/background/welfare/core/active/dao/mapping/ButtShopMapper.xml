@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pm.background.welfare.core.active.dao.ButtShopMapper">
+
+    <!-- 更改溢价 -->
+<update id="updatePremium"  parameterType="com.pm.background.welfare.core.active.entity.ButtShop">
+    update  buttShop  set
+    <if test="premium != null and premium != ''">
+        premium = #{premium}
+    </if>
+    <if test="integral != null and integral != ''">
+        integral = #{integral}
+    </if>
+</update>
+
+    <select id="selectListByLimitSize" parameterType="com.pm.background.welfare.core.active.entity.ButtShop" resultType="com.pm.background.welfare.core.active.entity.ButtShop">
+            select * from buttShop  order by create_time desc limit 5
+    </select>
+    <delete id="deleteAll" >
+        delete  from buttShop where status = '2'
+    </delete>
+</mapper>

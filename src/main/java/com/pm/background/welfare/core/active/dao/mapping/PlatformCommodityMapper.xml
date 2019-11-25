@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pm.background.welfare.core.active.dao.PlatformCommodityMapper">
+    <!-- 更改溢价 -->
+    <update id="updatePremium"  parameterType="com.pm.background.welfare.core.active.entity.PlatformCommodity">
+        update  commodityspecification  set
+            premium = #{premium},
+            min_price = #{minPrice},
+            integral = #{integral}
+        where id = #{id}
+    </update>
+    <select id="selectListByLimitSize" parameterType="com.pm.background.welfare.core.active.entity.PlatformCommodity" resultType="com.pm.background.welfare.core.active.entity.PlatformCommodity">
+            select * from platformcommodity  where status = '1' order by create_time desc limit 5
+    </select>
+</mapper>

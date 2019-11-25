@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pm.background.welfare.core.active.dao.SignInfoMapper">
+    <insert id="startToSignTime" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.pm.background.welfare.core.active.entity.SignInfo">
+
+      insert into sign_info (active_id,user_id,start_time,end_time,active_hour,create_by,create_time,update_by,update_time,remark)
+      values (#{activeId},#{userId},#{startTime},#{endTime},#{activeHour},#{createBy},#{createTime},#{updateBy},#{updateTime},#{remark})
+   </insert>
+    <update id="updateStatus" parameterType="com.pm.background.welfare.core.active.entity.SignInfo">
+        update sign_info set
+        approvalStatus = #{approvalStatus},
+        signUpStatus = #{signUpStatus},
+        approvalStatusName = #{approvalStatusName}
+          where id = #{id}
+    </update>
+    <insert id="signUpActiveInfo" parameterType="com.pm.background.welfare.core.active.entity.SignInfo"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into sign_info(active_id,activeName,user_id,userName,create_time,approvalStatus,activeCreateUserId,approvalStatusName,clockStatus,signUpStatus,avatar)
+        values (#{activeId},#{activeName},#{userId},#{userName},#{createTime},#{approvalStatus},#{activeCreateUserId},#{approvalStatusName},#{clockStatus},#{signUpStatus},#{avatar})
+    </insert>
+    <update id="startSignInfo" parameterType="com.pm.background.welfare.core.active.entity.SignInfo">
+        update sign_info set start_time = #{startTime},
+            imagePicture = #{imagePicture},
+          clockStatus = #{clockStatus}
+         where id = #{id}
+    </update>
+    <update id="endSignInfo" parameterType="com.pm.background.welfare.core.active.entity.SignInfo">
+        update sign_info set
+        end_time = #{endTime} ,
+        clockStatus = #{clockStatus},
+        imageEndPicture = #{imageEndPicture},
+        active_hour = #{activeHour}
+        where id = #{id}
+    </update>
+    <insert id="insertIntegral" parameterType="com.pm.background.welfare.core.active.entity.UserIntegral">
+       insert into integralTable (userId,userIntegral) values (#{userId},#{userIntegral})
+    </insert>
+    <select id="selectIntegralUser" resultType="com.pm.background.welfare.core.active.entity.UserIntegral">
+        select  userId,userIntegral from integralTable where userId= #{id}
+    </select>
+    <update id="updateUserIntegral" parameterType="com.pm.background.welfare.core.active.entity.UserIntegral">
+        update  integralTable set userIntegral = #{userIntegral} where userId = #{userId}
+    </update>
+
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pm.background.welfare.core.active.dao.CommoditySpecificationMapper">
+
+
+    <update id="updateCommodityPriceOrIntegral" parameterType="com.pm.background.welfare.core.active.entity.CommoditySpecification">
+        update  commodityspecification  set
+        <if test="premium != null and premium != ''">
+            premium = #{premium},
+            min_price = #{minPrice}
+        </if>
+        <if test="integral != null and integral != ''">
+            integral = #{integral}
+        </if>
+        where 1=1
+        <if test="id != null and id != ''">
+             and id = #{id}
+        </if>
+    </update>
+<delete id="deleteByCommodutyId">
+    delete  from  commodityspecification where platformCommodityId = #{id}
+</delete>
+</mapper>

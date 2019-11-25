@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pm.background.welfare.core.active.dao.CommunityMapper">
+    <update id="updatePeopleNumber" parameterType="com.pm.background.welfare.core.active.entity.Community">
+        update community set peopleNumber = #{peopleNumber} where id = #{id}
+    </update>
+    <select id="selectPeopleNumber" resultType="java.lang.Integer">
+        select  count(1) from community_user where communityId = #{id}
+    </select>
+    <delete id="deleteCommunityUser" parameterType="com.pm.background.welfare.core.active.entity.CommunityInvited">
+        delete from community_user  where userId = #{userId} and communityId = #{communityId}
+    </delete>
+    <delete id="deleteCommunityUserCreate"
+            parameterType="com.pm.background.welfare.core.active.entity.CommunityInvited">
+        delete from community_user  where communityId = #{communityId}
+    </delete>
+    <update id="updateCommunityContent" parameterType="com.pm.background.welfare.core.active.entity.Community">
+        update community set communityContent = #{communityContent} where  id = #{id}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pm.background.welfare.core.active.dao.ActiveInfoMapper">
+
+    <insert id="bindingCommodity" parameterType="com.pm.background.welfare.core.active.entity.BindingCommodity">
+        insert into binding_commodity(activeId,commodityId)
+        values (#{activeId},#{commodityId})
+    </insert>
+    <delete id="deleteBindingCommodity" parameterType="com.pm.background.welfare.core.active.entity.BindingCommodity">
+        delete from binding_commodity where 1=2
+        <if test="activeId != null and activeId != ''">
+            or activeId = #{activeId}
+        </if>
+        <if test="commodityId != null and commodityId != ''">
+            or commodityId = #{commodityId}
+        </if>
+    </delete>
+    <update id="updateStatus" parameterType="com.pm.background.welfare.core.active.entity.ActiveInfo">
+        update active_info set
+        <if test="statusName != null and statusName != ''">
+            statusName = #{statusName},
+        </if>
+        <if test="topStatus != null and topStatus != ''">
+            topStatus = #{topStatus},
+        </if>
+        <if test="topStatusName != null and topStatusName != ''">
+            topStatusName = #{topStatusName},
+        </if>
+        <if test="activePosition != null and activePosition != ''">
+            activePosition = #{activePosition},
+        </if>
+        status = #{status}
+        where id = #{id}
+    </update>
+
+    <update id="updateBindingStatus" parameterType="com.pm.background.welfare.core.active.entity.ActiveInfo">
+        update active_info set bindingStatus = #{bindingStatus} where id = #{id}
+    </update>
+    <update id="updateBinComStatus" parameterType="com.pm.background.welfare.core.active.entity.Commodity">
+        update sys_commodity set bindingStatus = #{bindingStatus} where id = #{id}
+    </update>
+
+    <select id="selectBindingAllId" resultType="java.lang.Long">
+        select commodityId from binding_commodity where activeId = #{activeId}
+    </select>
+    <update id="updateImageAddress" parameterType="com.pm.background.welfare.core.active.entity.ActiveInfo">
+        update active_info set imageAddress = #{imageAddress} where  id = #{id}
+    </update>
+    <insert id="insertActiveChat" parameterType="com.pm.background.welfare.core.active.entity.ActiveChat">
+      insert into activeChat(activeId,content,createTime,userName,imagePictrue)
+      values (#{activeId},#{content},#{createTime},#{userName},#{imagePictrue})
+  </insert>
+    <select id="selectActiveChat" parameterType="com.pm.background.welfare.core.active.entity.CommunityChat" resultType="com.pm.background.welfare.core.active.entity.ActiveChat">
+        select content,createTime,userName,activeId,imagePictrue from activeChat where activeId = #{id}
+        order by createTime desc limit #{startPage},#{endPage}
+    </select>
+   <select id="selectBingCommodityActive" parameterType="com.pm.background.welfare.core.active.entity.ActiveInfo" resultType="com.pm.background.welfare.core.active.entity.ActiveInfo">
+       SELECT a.title,b.name as commodityName from active_info a ,sys_commodity b,binding_commodity c where a.id=c.activeId and b.id=c.commodityId limit #{startSize},10
+   </select>
+    
+    <insert id="insertActiveFabulous" parameterType="com.pm.background.welfare.core.active.entity.ActiveInfo">
+        insert  into activeFabulous(userId,activeId) values (#{createBy},#{id})
+    </insert>
+
+    <select id="selectActiveFabulous" parameterType="com.pm.background.welfare.core.active.entity.ActiveInfo" resultType="java.lang.Integer">
+        select count(*) from activeFabulous where userId = #{createBy} and activeId = #{id}
+    </select>
+    <update id="updateActiveFabulos" parameterType="com.pm.background.welfare.core.active.entity.ActiveInfo">
+        update active_info set activeFabulous = #{activeFabulous} where id = #{id}
+    </update>
+    <delete id="deleteActiveFabulous" parameterType="com.pm.background.welfare.core.active.entity.ActiveInfo">
+        delete  from  activeFabulous where userId = #{createBy} and activeId = #{id}
+    </delete>
+
+</mapper>
